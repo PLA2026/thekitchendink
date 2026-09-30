@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Order Confirmed — The Kitchen Dink</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;700&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --kd-green: #2D5A27;
+      --kd-lime: #7AB648;
+      --kd-black: #111111;
+      --kd-white: #FFFFFF;
+      --kd-gray: #6B6B6B;
+    }
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--kd-black);
+      color: var(--kd-white);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 40px 24px;
+      text-align: center;
+    }
+    .check-circle {
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      background: rgba(122,182,72,0.15);
+      border: 2px solid var(--kd-lime);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 36px;
+      margin: 0 auto 32px;
+    }
+    .logo {
+      font-family: 'Oswald', sans-serif;
+      font-size: 16px;
+      font-weight: 700;
+      letter-spacing: 3px;
+      color: rgba(255,255,255,0.4);
+      text-transform: uppercase;
+      margin-bottom: 40px;
+    }
+    .logo em { color: var(--kd-lime); font-style: normal; }
+    h1 {
+      font-family: 'Oswald', sans-serif;
+      font-size: clamp(36px, 5vw, 56px);
+      font-weight: 700;
+      color: var(--kd-white);
+      line-height: 1.05;
+      margin-bottom: 16px;
+      letter-spacing: 1px;
+    }
+    h1 em { color: var(--kd-lime); font-style: normal; }
+    .sub {
+      font-size: 17px;
+      color: rgba(255,255,255,0.55);
+      line-height: 1.7;
+      max-width: 480px;
+      margin: 0 auto 40px;
+    }
+    .divider {
+      width: 60px;
+      height: 2px;
+      background: var(--kd-lime);
+      margin: 0 auto 40px;
+      border-radius: 1px;
+    }
+    .detail-box {
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 12px;
+      padding: 28px 36px;
+      max-width: 440px;
+      margin: 0 auto 40px;
+      text-align: left;
+    }
+    .detail-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px 0;
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+      font-size: 14px;
+    }
+    .detail-row:last-child { border-bottom: none; }
+    .detail-label { color: rgba(255,255,255,0.45); }
+    .detail-value { font-weight: 600; color: var(--kd-white); }
+    .back-btn {
+      display: inline-block;
+      background: var(--kd-lime);
+      color: var(--kd-black);
+      padding: 14px 32px;
+      border-radius: 6px;
+      font-size: 13px;
+      font-weight: 700;
+      text-decoration: none;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      transition: opacity 0.2s, transform 0.15s;
+    }
+    .back-btn:hover { opacity: 0.9; transform: translateY(-2px); }
+    .email-note {
+      font-size: 13px;
+      color: rgba(255,255,255,0.35);
+      margin-top: 20px;
+    }
+  </style>
+</head>
+<body>
+  <div class="logo">THE <em>KITCHEN</em> DINK</div>
+  <div class="check-circle">✓</div>
+  <h1>Order <em>Confirmed.</em></h1>
+  <p class="sub">Thank you for your purchase! Your order is on its way. You'll receive a confirmation email from Stripe with your receipt shortly.</p>
+  <div class="divider"></div>
+  <div class="detail-box">
+    <div class="detail-row">
+      <span class="detail-label">Store</span>
+      <span class="detail-value">The Kitchen Dink</span>
+    </div>
+    <div class="detail-row">
+      <span class="detail-label">Receipt</span>
+      <span class="detail-value">Sent to your email</span>
+    </div>
+    <div class="detail-row">
+      <span class="detail-label">Questions?</span>
+      <span class="detail-value">hello@thekitchendink.org</span>
+    </div>
+  </div>
+  <a href="/index.html" class="back-btn">Back to The Kitchen Dink</a>
+  <p class="email-note">Didn't get your receipt? Check your spam folder or contact us.</p>
+</body>
+</html>

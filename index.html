@@ -1,0 +1,1641 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>The Kitchen Dink</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;700&family=Nunito:wght@700;800;900&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --kd-green: #2D5A27;
+      --kd-lime: #7AB648;
+      --kd-lime-dim: rgba(122,182,72,0.15);
+      --kd-cream: #F5F0E8;
+      --kd-black: #111111;
+      --kd-white: #FFFFFF;
+      --kd-gray: #6B6B6B;
+      --kd-lightgray: #E4E4E4;
+      --polly-pink: #B85C85;
+      --polly-dark: #1a0a14;
+      --polly-glow: rgba(184,92,133,0.18);
+      --radius-sm: 6px;
+      --radius-md: 10px;
+      --radius-lg: 16px;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--kd-white);
+      color: var(--kd-black);
+      overflow-x: hidden;
+    }
+
+    /* ── SCROLLBAR ── */
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: var(--kd-black); }
+    ::-webkit-scrollbar-thumb { background: var(--kd-lime); border-radius: 3px; }
+
+    /* ── NAV ── */
+    nav {
+      background: var(--kd-black);
+      padding: 0 48px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 68px;
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+    }
+
+    .nav-logo {
+      font-family: 'Oswald', sans-serif;
+      font-size: 20px;
+      font-weight: 700;
+      color: var(--kd-white);
+      letter-spacing: 3px;
+      text-decoration: none;
+    }
+    .nav-logo em { color: var(--kd-lime); font-style: normal; }
+
+    .nav-links {
+      display: flex;
+      gap: 20px;
+      list-style: none;
+    }
+    .nav-links a {
+      color: rgba(255,255,255,0.6);
+      text-decoration: none;
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.8px;
+      text-transform: uppercase;
+      transition: color 0.2s;
+      white-space: nowrap;
+    }
+    .nav-links a:hover { color: var(--kd-lime); }
+
+    .nav-right { display: flex; align-items: center; gap: 16px; }
+
+    .nav-cta {
+      background: var(--kd-lime);
+      color: var(--kd-black);
+      padding: 10px 22px;
+      border-radius: var(--radius-sm);
+      font-size: 12px;
+      font-weight: 700;
+      text-decoration: none;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      transition: opacity 0.2s, transform 0.15s;
+    }
+    .nav-cta:hover { opacity: 0.88; transform: translateY(-1px); }
+
+    /* ── HERO ── */
+    .hero {
+      background: var(--kd-black);
+      min-height: 92vh;
+      display: flex;
+      align-items: center;
+      position: relative;
+      overflow: hidden;
+      padding: 80px 48px;
+    }
+
+    .hero-noise {
+      position: absolute;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+      opacity: 0.3;
+      pointer-events: none;
+    }
+
+    .hero-glow-1 {
+      position: absolute;
+      width: 700px;
+      height: 700px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(122,182,72,0.09) 0%, transparent 70%);
+      top: -200px;
+      right: -100px;
+      pointer-events: none;
+    }
+    .hero-glow-2 {
+      position: absolute;
+      width: 400px;
+      height: 400px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(122,182,72,0.06) 0%, transparent 70%);
+      bottom: -100px;
+      left: 200px;
+      pointer-events: none;
+    }
+
+    .hero-inner {
+      max-width: 1160px;
+      margin: 0 auto;
+      width: 100%;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 80px;
+      align-items: center;
+      position: relative;
+      z-index: 1;
+    }
+
+    .hero-title {
+      font-family: 'Oswald', sans-serif;
+      font-size: clamp(52px, 6vw, 84px);
+      font-weight: 700;
+      color: var(--kd-white);
+      line-height: 0.95;
+      letter-spacing: 1px;
+      margin-bottom: 24px;
+    }
+    .hero-title .accent { color: var(--kd-lime); }
+    .hero-title .outline {
+      -webkit-text-stroke: 2px rgba(255,255,255,0.25);
+      color: transparent;
+    }
+
+    .hero-sub {
+      font-size: 17px;
+      color: rgba(255,255,255,0.55);
+      line-height: 1.75;
+      margin-bottom: 40px;
+      max-width: 440px;
+    }
+
+    .hero-btns { display: flex; gap: 14px; flex-wrap: wrap; margin-bottom: 52px; }
+
+    .btn-primary {
+      background: var(--kd-lime);
+      color: var(--kd-black);
+      padding: 15px 30px;
+      border-radius: var(--radius-sm);
+      font-weight: 700;
+      font-size: 13px;
+      text-decoration: none;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      transition: transform 0.15s, opacity 0.15s;
+      display: inline-block;
+    }
+    .btn-primary:hover { transform: translateY(-2px); opacity: 0.9; }
+
+    .btn-ghost {
+      background: transparent;
+      color: rgba(255,255,255,0.75);
+      padding: 15px 30px;
+      border-radius: var(--radius-sm);
+      font-weight: 600;
+      font-size: 13px;
+      text-decoration: none;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      border: 1.5px solid rgba(255,255,255,0.2);
+      transition: border-color 0.2s, color 0.2s;
+      display: inline-block;
+    }
+    .btn-ghost:hover { border-color: var(--kd-lime); color: var(--kd-lime); }
+
+    .hero-stats {
+      display: flex;
+      gap: 40px;
+      padding-top: 36px;
+      border-top: 1px solid rgba(255,255,255,0.08);
+    }
+    .stat-num {
+      font-family: 'Oswald', sans-serif;
+      font-size: 32px;
+      font-weight: 700;
+      color: var(--kd-white);
+      line-height: 1;
+    }
+    .stat-label {
+      font-size: 11px;
+      color: rgba(255,255,255,0.4);
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      margin-top: 4px;
+    }
+
+    /* Hero video side */
+    .hero-visual {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    /* ── MARQUEE ── */
+    .marquee-wrap {
+      background: var(--kd-lime);
+      padding: 13px 0;
+      overflow: hidden;
+    }
+    .marquee-track {
+      display: flex;
+      width: max-content;
+      animation: marquee 30s linear infinite;
+    }
+    .marquee-item {
+      font-family: 'Oswald', sans-serif;
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--kd-black);
+      letter-spacing: 5px;
+      text-transform: uppercase;
+      padding: 0 52px;
+      white-space: nowrap;
+    }
+    .marquee-dot { opacity: 0.4; }
+    @keyframes marquee {
+      from { transform: translateX(0); }
+      to { transform: translateX(-50%); }
+    }
+
+    /* ── SHARED SECTION STYLES ── */
+    .section-wrap {
+      padding: 96px 48px;
+      max-width: 1160px;
+      margin: 0 auto;
+    }
+    .section-eyebrow {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: var(--kd-lime);
+      margin-bottom: 12px;
+    }
+    .section-title {
+      font-family: 'Oswald', sans-serif;
+      font-size: clamp(30px, 3.5vw, 46px);
+      font-weight: 700;
+      color: var(--kd-black);
+      line-height: 1.05;
+      margin-bottom: 48px;
+    }
+
+    /* ── BRANDS GRID ── */
+    .brands-bg { background: var(--kd-white); }
+    .brands-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 18px;
+    }
+
+    .brand-card {
+      background: var(--kd-black);
+      border-radius: var(--radius-lg);
+      padding: 40px;
+      position: relative;
+      overflow: hidden;
+      cursor: pointer;
+      transition: transform 0.25s;
+      border: 1px solid rgba(255,255,255,0.05);
+    }
+    .brand-card:hover { transform: translateY(-5px); }
+    .brand-card::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse at top right, rgba(122,182,72,0.1), transparent 65%);
+      pointer-events: none;
+    }
+
+    .brand-card.polly-card-brand {
+      background: linear-gradient(140deg, #14050e 0%, #22101a 100%);
+    }
+    .brand-card.polly-card-brand::after {
+      background: radial-gradient(ellipse at top right, rgba(184,92,133,0.18), transparent 65%);
+    }
+
+    .brand-icon {
+      width: 50px; height: 50px;
+      border-radius: 10px;
+      background: rgba(122,182,72,0.12);
+      border: 1px solid rgba(122,182,72,0.22);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 22px;
+      margin-bottom: 22px;
+    }
+    .polly-card-brand .brand-icon {
+      background: rgba(184,92,133,0.12);
+      border-color: rgba(184,92,133,0.25);
+    }
+
+    .brand-name {
+      font-family: 'Oswald', sans-serif;
+      font-size: 21px;
+      font-weight: 700;
+      color: var(--kd-white);
+      margin-bottom: 10px;
+      letter-spacing: 0.5px;
+      position: relative;
+      z-index: 1;
+    }
+    .brand-desc {
+      font-size: 14px;
+      color: rgba(255,255,255,0.48);
+      line-height: 1.7;
+      margin-bottom: 22px;
+      position: relative;
+      z-index: 1;
+    }
+    .brand-link {
+      font-size: 12px;
+      color: var(--kd-lime);
+      font-weight: 700;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      position: relative;
+      z-index: 1;
+    }
+    .brand-link::after { content: '→'; }
+
+    .polly-new-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(184,92,133,0.18);
+      border: 1px solid rgba(184,92,133,0.3);
+      color: #e888b4;
+      padding: 4px 10px;
+      border-radius: 100px;
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      margin-bottom: 16px;
+      position: relative;
+      z-index: 1;
+    }
+
+    /* ── WSOPICKLE SECTION ── */
+    .wso-section {
+      background: #080810;
+      padding: 100px 48px;
+      position: relative;
+      overflow: hidden;
+    }
+    .wso-glow1 {
+      position: absolute;
+      width: 600px; height: 600px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(255,0,200,0.08) 0%, transparent 70%);
+      top: -150px; right: -100px;
+      pointer-events: none;
+    }
+    .wso-glow2 {
+      position: absolute;
+      width: 400px; height: 400px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(0,180,255,0.07) 0%, transparent 70%);
+      bottom: -100px; left: 0;
+      pointer-events: none;
+    }
+    .wso-inner {
+      max-width: 1160px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 80px;
+      align-items: center;
+      position: relative;
+      z-index: 1;
+    }
+    .wso-logo-wrap {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .wso-logo-wrap img {
+      width: 100%;
+      max-width: 420px;
+      border-radius: var(--radius-lg);
+    }
+    .wso-eyebrow {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: #ff4ddb;
+      margin-bottom: 14px;
+    }
+    .wso-title {
+      font-family: 'Oswald', sans-serif;
+      font-size: clamp(32px, 4vw, 52px);
+      font-weight: 700;
+      color: var(--kd-white);
+      line-height: 1.05;
+      margin-bottom: 20px;
+      letter-spacing: 1px;
+    }
+    .wso-title .pickle { color: #ff4ddb; }
+    .wso-sub {
+      font-size: 16px;
+      color: rgba(255,255,255,0.55);
+      line-height: 1.8;
+      margin-bottom: 36px;
+    }
+    .btn-wso {
+      background: linear-gradient(135deg, #ff4ddb, #4d9fff);
+      color: var(--kd-white);
+      padding: 15px 30px;
+      border-radius: var(--radius-sm);
+      font-weight: 700;
+      font-size: 13px;
+      text-decoration: none;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      transition: transform 0.15s, opacity 0.15s;
+      display: inline-block;
+    }
+    .btn-wso:hover { transform: translateY(-2px); opacity: 0.9; }
+
+    /* ── PLA SECTION ── */
+    .pla-section {
+      background: #05091a;
+      padding: 100px 48px;
+      position: relative;
+      overflow: hidden;
+    }
+    .pla-glow1 {
+      position: absolute;
+      width: 500px; height: 500px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(30,60,140,0.25) 0%, transparent 70%);
+      top: -100px; left: -100px;
+      pointer-events: none;
+    }
+    .pla-glow2 {
+      position: absolute;
+      width: 400px; height: 400px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(180,20,40,0.12) 0%, transparent 70%);
+      bottom: -80px; right: 0;
+      pointer-events: none;
+    }
+    .pla-inner {
+      max-width: 1160px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 80px;
+      align-items: center;
+      position: relative;
+      z-index: 1;
+    }
+    .pla-eyebrow {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: #4d7fff;
+      margin-bottom: 14px;
+    }
+    .pla-title {
+      font-family: 'Oswald', sans-serif;
+      font-size: clamp(32px, 4vw, 52px);
+      font-weight: 700;
+      color: var(--kd-white);
+      line-height: 1.05;
+      margin-bottom: 20px;
+      letter-spacing: 1px;
+    }
+    .pla-sub {
+      font-size: 16px;
+      color: rgba(255,255,255,0.55);
+      line-height: 1.8;
+      margin-bottom: 36px;
+    }
+    .pla-logo-wrap {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .pla-logo-wrap img {
+      width: 100%;
+      max-width: 360px;
+    }
+    .btn-pla {
+      background: #1e3c8c;
+      color: var(--kd-white);
+      padding: 15px 30px;
+      border-radius: var(--radius-sm);
+      font-weight: 700;
+      font-size: 13px;
+      text-decoration: none;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      transition: transform 0.15s, opacity 0.15s;
+      display: inline-block;
+      border: 1px solid rgba(255,255,255,0.15);
+    }
+    .btn-pla:hover { transform: translateY(-2px); opacity: 0.9; }
+
+    /* ── POLLY SPOTLIGHT ── */
+    .polly-spotlight {
+      background: linear-gradient(135deg, #0c0208 0%, #180a12 45%, #0a100a 100%);
+      padding: 100px 48px;
+      position: relative;
+      overflow: hidden;
+    }
+    .polly-spotlight-glow1 {
+      position: absolute;
+      width: 600px; height: 600px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(184,92,133,0.1) 0%, transparent 70%);
+      top: -200px; right: -100px;
+      pointer-events: none;
+    }
+    .polly-spotlight-glow2 {
+      position: absolute;
+      width: 400px; height: 400px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(122,182,72,0.06) 0%, transparent 70%);
+      bottom: -100px; left: 50px;
+      pointer-events: none;
+    }
+
+    .polly-spotlight-inner {
+      max-width: 860px;
+      margin: 0 auto;
+      position: relative;
+      z-index: 1;
+    }
+
+    .polly-eyebrow {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: var(--polly-pink);
+      margin-bottom: 14px;
+    }
+    .polly-headline {
+      font-family: 'Nunito', sans-serif;
+      font-size: clamp(34px, 4vw, 56px);
+      font-weight: 900;
+      color: var(--kd-white);
+      line-height: 1.08;
+      margin-bottom: 18px;
+    }
+    .polly-headline .pp { color: var(--polly-pink); }
+
+    .polly-sub {
+      font-size: 16px;
+      color: rgba(255,255,255,0.5);
+      line-height: 1.8;
+      margin-bottom: 36px;
+    }
+
+    .books-row {
+      display: flex;
+      gap: 14px;
+      margin-bottom: 36px;
+    }
+    .book-pill {
+      flex: 1;
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: var(--radius-md);
+      padding: 16px 18px;
+      cursor: pointer;
+      transition: border-color 0.2s, background 0.2s;
+      text-decoration: none;
+    }
+    .book-pill:hover {
+      border-color: var(--polly-pink);
+      background: rgba(184,92,133,0.06);
+    }
+    .book-pill-num {
+      font-size: 10px;
+      color: var(--polly-pink);
+      font-weight: 700;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      margin-bottom: 5px;
+    }
+    .book-pill-title {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--kd-white);
+      line-height: 1.3;
+    }
+
+    .polly-btns { display: flex; gap: 14px; flex-wrap: wrap; }
+
+    .btn-polly {
+      background: var(--polly-pink);
+      color: var(--kd-white);
+      padding: 15px 30px;
+      border-radius: var(--radius-sm);
+      font-weight: 700;
+      font-size: 13px;
+      text-decoration: none;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      transition: transform 0.15s, opacity 0.15s;
+      display: inline-block;
+    }
+    .btn-polly:hover { transform: translateY(-2px); opacity: 0.9; }
+
+    .btn-polly-ghost {
+      background: transparent;
+      color: rgba(255,255,255,0.65);
+      padding: 15px 30px;
+      border-radius: var(--radius-sm);
+      font-weight: 600;
+      font-size: 13px;
+      text-decoration: none;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      border: 1.5px solid rgba(255,255,255,0.18);
+      transition: border-color 0.2s, color 0.2s;
+      display: inline-block;
+    }
+    .btn-polly-ghost:hover { border-color: var(--polly-pink); color: var(--polly-pink); }
+
+    /* Polly Player Card */
+    .polly-card-visual {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .player-card {
+      width: 300px;
+      background: #18060f;
+      border: 2.5px solid var(--polly-pink);
+      border-radius: 18px;
+      overflow: hidden;
+      box-shadow: 0 0 80px rgba(184,92,133,0.3), 0 0 20px rgba(184,92,133,0.1);
+    }
+    .pc-header {
+      background: var(--polly-pink);
+      padding: 11px 18px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .pc-header-title {
+      font-family: 'Oswald', sans-serif;
+      font-size: 17px;
+      font-weight: 700;
+      color: var(--kd-white);
+      letter-spacing: 2.5px;
+    }
+    .pc-header-sub {
+      font-size: 10px;
+      color: rgba(255,255,255,0.75);
+      font-weight: 700;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+    }
+    .pc-art {
+      background: linear-gradient(160deg, #2a1020 0%, #16060e 100%);
+      height: 210px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-bottom: 1.5px solid rgba(184,92,133,0.25);
+      position: relative;
+    }
+    .pc-stripe {
+      position: absolute;
+      left: 16px; top: 0; bottom: 0;
+      width: 3px;
+      background: rgba(184,92,133,0.35);
+      border-radius: 2px;
+    }
+    .pc-name-bar {
+      background: rgba(184,92,133,0.12);
+      border-bottom: 1px solid rgba(184,92,133,0.18);
+      padding: 11px 18px;
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+    }
+    .pc-name {
+      font-family: 'Oswald', sans-serif;
+      font-size: 24px;
+      font-weight: 700;
+      color: var(--kd-white);
+      letter-spacing: 1px;
+    }
+    .pc-species {
+      font-size: 11px;
+      color: var(--polly-pink);
+      font-weight: 700;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+    }
+    .pc-stats {
+      padding: 14px 18px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+    .pc-stat-label {
+      font-size: 10px;
+      color: rgba(255,255,255,0.38);
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      margin-bottom: 2px;
+    }
+    .pc-stat-val {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--kd-white);
+    }
+    .pc-footer {
+      background: rgba(0,0,0,0.4);
+      padding: 8px 18px;
+      text-align: center;
+    }
+    .pc-footer-text {
+      font-size: 9px;
+      color: rgba(255,255,255,0.25);
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+    }
+
+    /* ── MERCH ── */
+    .merch-bg { background: var(--kd-cream); }
+    .merch-section-wrap { padding: 96px 48px; max-width: 1160px; margin: 0 auto; }
+    .merch-section-wrap .section-title { color: var(--kd-black); }
+
+    .merch-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 20px;
+      margin-top: 48px;
+    }
+    .merch-card {
+      background: var(--kd-white);
+      border-radius: var(--radius-md);
+      overflow: hidden;
+      border: 1px solid var(--kd-lightgray);
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .merch-card:hover { transform: translateY(-5px); box-shadow: 0 16px 40px rgba(0,0,0,0.1); }
+    .merch-img {
+      aspect-ratio: 1;
+      background: var(--kd-black);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+    }
+    .merch-img-text {
+      font-family: 'Oswald', sans-serif;
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--kd-white);
+      text-align: center;
+      letter-spacing: 2px;
+    }
+    .merch-img-text small {
+      display: block;
+      font-size: 10px;
+      color: var(--kd-lime);
+      margin-top: 4px;
+      letter-spacing: 3px;
+      font-family: 'DM Sans', sans-serif;
+      font-weight: 500;
+    }
+    .merch-tag {
+      position: absolute;
+      top: 12px; left: 12px;
+      background: var(--kd-lime);
+      color: var(--kd-black);
+      font-size: 10px;
+      font-weight: 700;
+      padding: 4px 9px;
+      border-radius: 4px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+    .merch-tag.pink { background: var(--polly-pink); color: var(--kd-white); }
+    .merch-info { padding: 16px 18px; }
+    .merch-name { font-size: 14px; font-weight: 600; color: var(--kd-black); margin-bottom: 4px; }
+    .merch-price { font-size: 14px; color: var(--kd-gray); }
+    .merch-price strong { color: var(--kd-black); }
+
+    .merch-cta-wrap { text-align: center; margin-top: 40px; }
+    .merch-cta {
+      display: inline-block;
+      background: var(--kd-black);
+      color: var(--kd-white);
+      padding: 16px 40px;
+      border-radius: var(--radius-sm);
+      font-size: 13px;
+      font-weight: 700;
+      text-decoration: none;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      transition: background 0.2s, transform 0.15s;
+    }
+    .merch-cta:hover { background: var(--kd-green); transform: translateY(-1px); }
+
+    /* ── EVENTS ── */
+    .events-bg { background: var(--kd-white); }
+    .events-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 18px;
+    }
+    .event-card {
+      border: 1px solid var(--kd-lightgray);
+      border-radius: var(--radius-md);
+      padding: 28px;
+      display: flex;
+      gap: 20px;
+      align-items: flex-start;
+      transition: border-color 0.2s, box-shadow 0.2s;
+      cursor: pointer;
+    }
+    .event-card:hover { border-color: var(--kd-lime); box-shadow: 0 4px 20px rgba(0,0,0,0.05); }
+    .event-card.polly-event:hover { border-color: var(--polly-pink); }
+    .event-date-box {
+      min-width: 58px;
+      background: var(--kd-black);
+      border-radius: var(--radius-sm);
+      padding: 10px 8px;
+      text-align: center;
+      flex-shrink: 0;
+    }
+    .event-date-box.polly-date { background: #1a0810; }
+    .event-month { font-size: 10px; color: var(--kd-lime); font-weight: 700; letter-spacing: 2px; text-transform: uppercase; }
+    .event-date-box.polly-date .event-month { color: var(--polly-pink); }
+    .event-day { font-family: 'Oswald', sans-serif; font-size: 30px; font-weight: 700; color: var(--kd-white); line-height: 1; }
+    .event-name { font-family: 'Oswald', sans-serif; font-size: 18px; font-weight: 700; color: var(--kd-black); margin-bottom: 5px; }
+    .event-meta { font-size: 13px; color: var(--kd-gray); margin-bottom: 12px; }
+    .event-badge {
+      display: inline-block;
+      background: rgba(45,90,39,0.1);
+      color: var(--kd-green);
+      font-size: 11px;
+      font-weight: 700;
+      padding: 4px 10px;
+      border-radius: 100px;
+      letter-spacing: 0.5px;
+    }
+    .event-badge.pink { background: rgba(184,92,133,0.1); color: var(--polly-pink); }
+
+    /* ── STORE / CART ── */
+    .size-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin: 10px 0;
+    }
+    .size-label {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--kd-gray);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .size-select {
+      flex: 1;
+      padding: 7px 10px;
+      border: 1.5px solid var(--kd-lightgray);
+      border-radius: var(--radius-sm);
+      font-size: 13px;
+      font-family: 'DM Sans', sans-serif;
+      background: var(--kd-white);
+      color: var(--kd-black);
+      cursor: pointer;
+      transition: border-color 0.2s;
+    }
+    .size-select:focus {
+      outline: none;
+      border-color: var(--kd-lime);
+    }
+    .add-to-cart-btn {
+      width: 100%;
+      background: var(--kd-black);
+      color: var(--kd-white);
+      border: none;
+      padding: 12px;
+      border-radius: var(--radius-sm);
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: background 0.2s, transform 0.15s;
+      margin-top: 4px;
+      font-family: 'DM Sans', sans-serif;
+    }
+    .add-to-cart-btn:hover { background: var(--kd-green); transform: translateY(-1px); }
+    .add-to-cart-btn.added { background: var(--kd-lime); color: var(--kd-black); }
+
+    /* Cart drawer */
+    .cart-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.5);
+      z-index: 1999;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s;
+    }
+    .cart-overlay.open { opacity: 1; pointer-events: all; }
+    .cart-drawer {
+      position: fixed;
+      top: 0; right: 0; bottom: 0;
+      width: 400px;
+      max-width: 100vw;
+      background: var(--kd-white);
+      z-index: 2000;
+      transform: translateX(100%);
+      transition: transform 0.3s ease;
+      display: flex;
+      flex-direction: column;
+      box-shadow: -8px 0 40px rgba(0,0,0,0.15);
+    }
+    .cart-drawer.open { transform: translateX(0); }
+    .cart-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 24px;
+      border-bottom: 1px solid var(--kd-lightgray);
+    }
+    .cart-title {
+      font-family: 'Oswald', sans-serif;
+      font-size: 22px;
+      font-weight: 700;
+      letter-spacing: 1px;
+    }
+    .cart-close {
+      background: none;
+      border: none;
+      font-size: 20px;
+      cursor: pointer;
+      color: var(--kd-gray);
+      padding: 4px 8px;
+      border-radius: 4px;
+      transition: background 0.2s;
+    }
+    .cart-close:hover { background: var(--kd-lightgray); }
+    .cart-items {
+      flex: 1;
+      overflow-y: auto;
+      padding: 16px 24px;
+    }
+    .cart-empty {
+      color: var(--kd-gray);
+      font-size: 14px;
+      text-align: center;
+      padding: 48px 0;
+    }
+    .cart-item {
+      display: flex;
+      gap: 14px;
+      align-items: flex-start;
+      padding: 16px 0;
+      border-bottom: 1px solid var(--kd-lightgray);
+    }
+    .cart-item-img {
+      width: 64px;
+      height: 64px;
+      border-radius: var(--radius-sm);
+      object-fit: cover;
+      background: var(--kd-lightgray);
+      flex-shrink: 0;
+    }
+    .cart-item-info { flex: 1; }
+    .cart-item-name { font-size: 14px; font-weight: 600; margin-bottom: 3px; }
+    .cart-item-meta { font-size: 12px; color: var(--kd-gray); margin-bottom: 6px; }
+    .cart-item-price { font-size: 14px; font-weight: 700; color: var(--kd-black); }
+    .cart-item-remove {
+      background: none;
+      border: none;
+      color: var(--kd-gray);
+      font-size: 16px;
+      cursor: pointer;
+      padding: 0 4px;
+      transition: color 0.2s;
+    }
+    .cart-item-remove:hover { color: #c0392b; }
+    .cart-footer {
+      padding: 20px 24px;
+      border-top: 1px solid var(--kd-lightgray);
+    }
+    .cart-total-row {
+      display: flex;
+      justify-content: space-between;
+      font-size: 16px;
+      font-weight: 700;
+      margin-bottom: 16px;
+    }
+    .cart-checkout-btn {
+      width: 100%;
+      background: var(--kd-lime);
+      color: var(--kd-black);
+      border: none;
+      padding: 16px;
+      border-radius: var(--radius-sm);
+      font-size: 15px;
+      font-weight: 700;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      cursor: pointer;
+      font-family: 'DM Sans', sans-serif;
+      transition: opacity 0.2s, transform 0.15s;
+    }
+    .cart-checkout-btn:hover { opacity: 0.9; transform: translateY(-1px); }
+    .cart-checkout-btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+    .cart-note {
+      text-align: center;
+      font-size: 11px;
+      color: var(--kd-gray);
+      margin-top: 10px;
+    }
+
+    /* Floating cart button */
+    .cart-fab {
+      position: fixed;
+      bottom: 32px;
+      right: 32px;
+      background: var(--kd-black);
+      color: var(--kd-white);
+      border: none;
+      padding: 14px 20px;
+      border-radius: 50px;
+      font-size: 16px;
+      font-weight: 700;
+      cursor: pointer;
+      z-index: 1500;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+      transition: transform 0.2s, background 0.2s;
+      font-family: 'DM Sans', sans-serif;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .cart-fab:hover { background: var(--kd-green); transform: translateY(-2px); }
+    .cart-fab-count {
+      background: var(--kd-lime);
+      color: var(--kd-black);
+      border-radius: 50%;
+      width: 22px;
+      height: 22px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    /* ── FOOTER ── */
+    footer {
+      background: var(--kd-black);
+      padding: 72px 48px 36px;
+      border-top: 1px solid rgba(255,255,255,0.06);
+    }
+    .footer-inner { max-width: 1160px; margin: 0 auto; }
+    .footer-top {
+      display: grid;
+      grid-template-columns: 2fr 1fr 1fr 1fr 1fr;
+      gap: 40px;
+      margin-bottom: 52px;
+    }
+    .footer-logo {
+      font-family: 'Oswald', sans-serif;
+      font-size: 19px;
+      font-weight: 700;
+      color: var(--kd-white);
+      letter-spacing: 2.5px;
+      margin-bottom: 14px;
+    }
+    .footer-logo em { color: var(--kd-lime); font-style: normal; }
+    .footer-tagline { font-size: 14px; color: rgba(255,255,255,0.38); line-height: 1.7; margin-bottom: 22px; }
+    .footer-social { display: flex; gap: 10px; }
+    .social-btn {
+      width: 38px; height: 38px;
+      border-radius: var(--radius-sm);
+      border: 1px solid rgba(255,255,255,0.1);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 13px;
+      text-decoration: none;
+      color: rgba(255,255,255,0.45);
+      transition: border-color 0.2s, color 0.2s;
+      font-weight: 700;
+      font-family: 'DM Sans', sans-serif;
+    }
+    .social-btn:hover { border-color: var(--kd-lime); color: var(--kd-lime); }
+    .footer-col-title {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 2.5px;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.3);
+      margin-bottom: 18px;
+    }
+    .footer-links { list-style: none; display: flex; flex-direction: column; gap: 11px; }
+    .footer-links a {
+      font-size: 14px;
+      color: rgba(255,255,255,0.5);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+    .footer-links a:hover { color: var(--kd-lime); }
+    .footer-bottom {
+      border-top: 1px solid rgba(255,255,255,0.06);
+      padding-top: 26px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .footer-copy { font-size: 12px; color: rgba(255,255,255,0.25); }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 900px) {
+      nav { padding: 0 24px; }
+      .nav-links { display: none; }
+      .hero { padding: 60px 24px; }
+      .hero-inner { grid-template-columns: 1fr; gap: 40px; }
+      .hero-visual { display: none; }
+      .section-wrap, .merch-section-wrap, .polly-spotlight { padding: 60px 24px; }
+      .brands-grid { grid-template-columns: 1fr; }
+      .polly-spotlight-inner { grid-template-columns: 1fr; }
+      .merch-grid { grid-template-columns: 1fr 1fr; }
+      .events-grid { grid-template-columns: 1fr; }
+      .footer-top { grid-template-columns: 1fr 1fr; gap: 32px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="#" class="nav-logo">THE <em>KITCHEN</em> DINK</a>
+  <ul class="nav-links">
+    <li><a href="#about">About Us</a></li>
+    <li><a href="#pla">Pickleball League of America</a></li>
+    <li><a href="#wsopickle">World Series of PICKLE</a></li>
+    <li><a href="#polly">Polly the Panda</a></li>
+  </ul>
+  <div class="nav-right">
+    <a href="#merch" class="nav-cta">Shop Merch</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero" id="about">
+  <div class="hero-noise"></div>
+  <div class="hero-glow-1"></div>
+  <div class="hero-glow-2"></div>
+  <div class="hero-inner">
+    <div>
+      <h1 class="hero-title">
+        WHERE THE<br>
+        <span class="accent">GAME</span><br>
+        <span class="outline">LIVES.</span>
+      </h1>
+      <p class="hero-sub">Events, community, gear, and stories for the pickleverse at large.</p>
+      <div class="hero-btns">
+        <a href="#ecosystem" class="btn-primary">Our Story</a>
+      </div>
+    </div>
+    <div class="hero-visual">
+      <video
+        autoplay
+        muted
+        loop
+        playsinline
+        style="width:100%;max-width:500px;border-radius:var(--radius-lg);object-fit:cover;aspect-ratio:9/16;max-height:72vh;display:block;"
+      >
+        <source src="dq_pickle_reel_1.mp4" type="video/mp4" />
+      </video>
+    </div>
+  </div>
+</section>
+
+<!-- MARQUEE -->
+<div class="marquee-wrap">
+  <div class="marquee-track">
+    <span class="marquee-item">Play</span>
+    <span class="marquee-item marquee-dot">·</span>
+    <span class="marquee-item">Compete</span>
+    <span class="marquee-item marquee-dot">·</span>
+    <span class="marquee-item">Read</span>
+    <span class="marquee-item marquee-dot">·</span>
+    <span class="marquee-item">Belong</span>
+    <span class="marquee-item marquee-dot">·</span>
+    <span class="marquee-item">Play</span>
+    <span class="marquee-item marquee-dot">·</span>
+    <span class="marquee-item">Compete</span>
+    <span class="marquee-item marquee-dot">·</span>
+    <span class="marquee-item">Read</span>
+    <span class="marquee-item marquee-dot">·</span>
+    <span class="marquee-item">Belong</span>
+    <span class="marquee-item marquee-dot">·</span>
+    <span class="marquee-item">Play</span>
+    <span class="marquee-item marquee-dot">·</span>
+    <span class="marquee-item">Compete</span>
+    <span class="marquee-item marquee-dot">·</span>
+    <span class="marquee-item">Read</span>
+    <span class="marquee-item marquee-dot">·</span>
+    <span class="marquee-item">Belong</span>
+    <span class="marquee-item marquee-dot">·</span>
+  </div>
+</div>
+
+<!-- ECOSYSTEM / BRANDS -->
+<div class="brands-bg" id="ecosystem">
+  <div class="section-wrap">
+    <div class="section-eyebrow">The Ecosystem</div>
+    <div class="section-title">One Brand. Four Worlds.</div>
+    <div class="brands-grid">
+      <div class="brand-card">
+        <div class="brand-name">World Series of PICKLE</div>
+        <div class="brand-desc">The ultimate event brand for competitive pickleball. WSOPICKLE employs the PartyPICKLE format to deliver premier tournament experiences.</div>
+        <a href="#wsopickle" class="brand-link">Learn more</a>
+      </div>
+      <div class="brand-card">
+        <div class="brand-name">Pickleball League of America</div>
+        <div class="brand-desc">Structured season-long league play for every skill level. Real competition, real community, real growth on and off the court.</div>
+        <a href="#pla" class="brand-link">Learn more</a>
+      </div>
+      <div class="brand-card polly-card-brand">
+        <div class="brand-name">Polly the Panda</div>
+        <div class="brand-desc">A fearless panda who discovers the magic of pickleball. Picture books for the next generation of players — fun, colorful, and full of heart.</div>
+        <a href="#polly" class="brand-link">Learn more</a>
+      </div>
+      <div class="brand-card">
+        <div class="brand-name">The Kitchen Dink</div>
+        <div class="brand-desc">The mothership. Gear, content, and culture at the intersection of pickleball and lifestyle. Where it all comes together.</div>
+        <a href="#merch" class="brand-link">Learn more</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- WSOPICKLE SECTION -->
+<section class="wso-section" id="wsopickle">
+  <div class="wso-glow1"></div>
+  <div class="wso-glow2"></div>
+  <div class="wso-inner">
+    <div class="wso-logo-wrap">
+      <img src="WSOPICKLE_Primary_Logo.png" alt="World Series of PICKLE Logo" />
+    </div>
+    <div>
+      <div class="wso-eyebrow">Tournament Series</div>
+      <h2 class="wso-title">World Series<br>of <span class="pickle">PICKLE</span></h2>
+      <p class="wso-sub">WSOPICKLE is a boutique professional tournament that aims to find the best overall player. Using the PartyPICKLE competition format, competitors rotate partners after each game, effectively playing doubles pickleball as a single all the way to their individual prize.</p>
+      <a href="https://evergladesinvitational.org/" class="btn-wso" target="_blank" rel="noopener">Experience WSOPICKLE</a>
+    </div>
+  </div>
+</section>
+
+<!-- PLA SECTION -->
+<section class="pla-section" id="pla">
+  <div class="pla-glow1"></div>
+  <div class="pla-glow2"></div>
+  <div class="pla-inner">
+    <div>
+      <div class="pla-eyebrow">Educational Programming</div>
+      <h2 class="pla-title">Pickleball League<br>of America</h2>
+      <p class="pla-sub">Pickleball League of America brings the game directly to lower, middle, and high school students with educational programming and competitive events.</p>
+      <a href="https://plapickleball.org/" class="btn-pla" target="_blank" rel="noopener">Is your school interested?</a>
+    </div>
+    <div class="pla-logo-wrap">
+      <img src="PLA_Primary_Logo.png" alt="Pickleball League of America Logo" />
+    </div>
+  </div>
+</section>
+
+<!-- POLLY SPOTLIGHT -->
+<section class="polly-spotlight" id="polly">
+  <div class="polly-spotlight-glow1"></div>
+  <div class="polly-spotlight-glow2"></div>
+  <div class="polly-spotlight-inner">
+    <div>
+      <div class="polly-eyebrow">Meet the character</div>
+      <h2 class="polly-headline">The <span class="pp">Polly</span><br>the Panda Series</h2>
+      <p class="polly-sub">From Bamboo Village to the pickleball court — Polly's adventures teach kids about perseverance, sportsmanship, and the joy of finding your game. Written by J. Barney Ball, illustrated by Alexandra Abagiu.</p>
+      <div class="books-row">
+        <a href="https://www.amazon.com/dp/B0BQ9H74PS" class="book-pill" target="_blank" rel="noopener">
+          <div class="book-pill-num">Book 1 · Available Now on Amazon</div>
+          <div class="book-pill-title">Polly's In a Pickle</div>
+        </a>
+        <div class="book-pill">
+          <div class="book-pill-num">Book 2 · Coming Soon</div>
+          <div class="book-pill-title">Polly and the Magic Paddle</div>
+        </div>
+      </div>
+      <div class="polly-btns">
+        <a href="https://www.amazon.com/dp/B0BQ9H74PS" class="btn-polly" target="_blank" rel="noopener">Buy on Amazon</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- MERCH / STORE -->
+<div class="merch-bg" id="merch">
+  <div class="merch-section-wrap">
+    <div class="section-eyebrow">Gear Up</div>
+    <div class="section-title">Fresh out the kitchen.</div>
+    <div class="merch-grid">
+
+      <!-- Product 1: Roots Hoodie -->
+      <div class="merch-card">
+        <div class="merch-img" style="background:#e8e4de;">
+          <img src="Roots_Hoodie.jpg" alt="Roots Hoodie" style="width:100%;height:100%;object-fit:cover;display:block;" />
+        </div>
+        <div class="merch-info">
+          <div class="merch-name">Roots Hoodie</div>
+          <div class="merch-price"><strong>$180</strong></div>
+          <div class="size-row">
+            <label class="size-label">Size:</label>
+            <select class="size-select" id="size-roots">
+              <option value="">Select</option>
+              <option>XS</option><option>S</option><option>M</option>
+              <option>L</option><option>XL</option><option>XXL</option>
+            </select>
+          </div>
+          <button class="add-to-cart-btn" onclick="addToCart('Roots Hoodie', 180, 'roots', 'Roots_Hoodie.jpg')">Add to Cart</button>
+        </div>
+      </div>
+
+      <!-- Product 2: Polly Tee -->
+      <div class="merch-card">
+        <div class="merch-img" style="background:#b8d8e8;">
+          <img src="Polly_Three-Quarter_Sleeve_Tee.jpg" alt="Polly Three-Quarter Sleeve Tee" style="width:100%;height:100%;object-fit:cover;display:block;" />
+        </div>
+        <div class="merch-info">
+          <div class="merch-name">Polly Three-Quarter Sleeve Tee</div>
+          <div class="merch-price"><strong>$40</strong></div>
+          <div class="size-row">
+            <label class="size-label">Size:</label>
+            <select class="size-select" id="size-polly">
+              <option value="">Select</option>
+              <option>XS</option><option>S</option><option>M</option>
+              <option>L</option><option>XL</option><option>XXL</option>
+            </select>
+          </div>
+          <button class="add-to-cart-btn" onclick="addToCart('Polly Three-Quarter Sleeve Tee', 40, 'polly', 'Polly_Three-Quarter_Sleeve_Tee.jpg')">Add to Cart</button>
+        </div>
+      </div>
+
+      <!-- Product 3: White PICKLE Crew -->
+      <div class="merch-card">
+        <div class="merch-img" style="background:#f2f2f2;">
+          <img src="White_PICKLE_Hoodie_Sweatshirt.jpg" alt="White PICKLE Crew Sweatshirt" style="width:100%;height:100%;object-fit:cover;display:block;" />
+        </div>
+        <div class="merch-info">
+          <div class="merch-name">PICKLE Crew Sweatshirt</div>
+          <div class="merch-price"><strong>$80</strong></div>
+          <div class="size-row">
+            <label class="size-label">Size:</label>
+            <select class="size-select" id="size-white-crew">
+              <option value="">Select</option>
+              <option>XS</option><option>S</option><option>M</option>
+              <option>L</option><option>XL</option><option>XXL</option>
+            </select>
+          </div>
+          <button class="add-to-cart-btn" onclick="addToCart('PICKLE Crew Sweatshirt', 80, 'white-crew', 'White_PICKLE_Hoodie_Sweatshirt.jpg')">Add to Cart</button>
+        </div>
+      </div>
+
+      <!-- Product 4: Black PICKLE Hoodie -->
+      <div class="merch-card">
+        <div class="merch-img" style="background:#1a1a1a;">
+          <img src="Black_PICKLE_Hoodie_Sweatshirt.jpg" alt="Black PICKLE Hoodie Sweatshirt" style="width:100%;height:100%;object-fit:cover;display:block;" />
+        </div>
+        <div class="merch-info">
+          <div class="merch-name">PICKLE Hoodie Sweatshirt</div>
+          <div class="merch-price"><strong>$80</strong></div>
+          <div class="size-row">
+            <label class="size-label">Size:</label>
+            <select class="size-select" id="size-black-hoodie">
+              <option value="">Select</option>
+              <option>XS</option><option>S</option><option>M</option>
+              <option>L</option><option>XL</option><option>XXL</option>
+            </select>
+          </div>
+          <button class="add-to-cart-btn" onclick="addToCart('PICKLE Hoodie Sweatshirt', 80, 'black-hoodie', 'Black_PICKLE_Hoodie_Sweatshirt.jpg')">Add to Cart</button>
+        </div>
+      </div>
+
+    </div><!-- /merch-grid -->
+  </div><!-- /merch-section-wrap -->
+</div>
+
+<!-- CART DRAWER -->
+<div class="cart-overlay" id="cartOverlay" onclick="closeCart()"></div>
+<div class="cart-drawer" id="cartDrawer">
+  <div class="cart-header">
+    <div class="cart-title">Your Cart</div>
+    <button class="cart-close" onclick="closeCart()">✕</button>
+  </div>
+  <div class="cart-items" id="cartItems">
+    <div class="cart-empty" id="cartEmpty">Your cart is empty.</div>
+  </div>
+  <div class="cart-footer" id="cartFooter" style="display:none;">
+    <div class="cart-total-row">
+      <span>Total</span>
+      <span id="cartTotal">$0</span>
+    </div>
+    <button class="cart-checkout-btn" id="checkoutBtn" onclick="goToCheckout()">Checkout →</button>
+    <div class="cart-note">Secure checkout powered by Stripe</div>
+  </div>
+</div>
+
+<!-- FLOATING CART BUTTON -->
+<button class="cart-fab" id="cartFab" onclick="openCart()" style="display:none;">
+  🛒 <span class="cart-fab-count" id="cartFabCount">0</span>
+</button>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-inner">
+    <div class="footer-top">
+      <div>
+        <div class="footer-logo">THE <em>KITCHEN</em> DINK</div>
+        <div class="footer-tagline">Community-first pickleball culture,<br>built in South Florida.</div>
+        <div class="footer-social">
+          <a href="https://www.instagram.com/kitchen_dink/" class="social-btn" target="_blank" rel="noopener">IG</a>
+          <a href="#" class="social-btn">TK</a>
+          <a href="#" class="social-btn">YT</a>
+        </div>
+      </div>
+      <div>
+        <div class="footer-col-title">Compete</div>
+        <ul class="footer-links">
+          <li><a href="#">World Series of PICKLE</a></li>
+          <li><a href="#">Everglades Invitational</a></li>
+          <li><a href="#">PLA Leagues</a></li>
+        </ul>
+      </div>
+      <div>
+        <div class="footer-col-title">Polly</div>
+        <ul class="footer-links">
+          <li><a href="#polly">About the series</a></li>
+          <li><a href="https://www.amazon.com/dp/B0BQ9H74PS" target="_blank" rel="noopener">Buy Book 1</a></li>
+          <li><a href="#">Book 2 updates</a></li>
+        </ul>
+      </div>
+      <div>
+        <div class="footer-col-title">Shop</div>
+        <ul class="footer-links">
+          <li><a href="#">All merch</a></li>
+          <li><a href="#">TKD gear</a></li>
+          <li><a href="#">Polly gear</a></li>
+          <li><a href="#">Event gear</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <div class="footer-copy">© 2025 The Kitchen Dink. All rights reserved.</div>
+      <div class="footer-copy">thekitchendink.org</div>
+    </div>
+  </div>
+</footer>
+
+<script>
+  // ── CART STATE ──
+  let cart = [];
+
+  function addToCart(name, price, sizeId, img) {
+    const sizeEl = document.getElementById('size-' + sizeId);
+    const size = sizeEl ? sizeEl.value : '';
+    if (!size) {
+      sizeEl.style.borderColor = '#e74c3c';
+      sizeEl.focus();
+      setTimeout(() => sizeEl.style.borderColor = '', 1500);
+      return;
+    }
+    const existing = cart.find(i => i.name === name && i.size === size);
+    if (existing) {
+      existing.qty += 1;
+    } else {
+      cart.push({ name, price, size, img, qty: 1 });
+    }
+    renderCart();
+    openCart();
+    // Flash the button
+    const btns = document.querySelectorAll('.add-to-cart-btn');
+    btns.forEach(b => {
+      if (b.getAttribute('onclick') && b.getAttribute('onclick').includes(sizeId)) {
+        b.textContent = '✓ Added!';
+        b.classList.add('added');
+        setTimeout(() => { b.textContent = 'Add to Cart'; b.classList.remove('added'); }, 1500);
+      }
+    });
+  }
+
+  function removeFromCart(index) {
+    cart.splice(index, 1);
+    renderCart();
+  }
+
+  function renderCart() {
+    const itemsEl = document.getElementById('cartItems');
+    const emptyEl = document.getElementById('cartEmpty');
+    const footerEl = document.getElementById('cartFooter');
+    const fabEl = document.getElementById('cartFab');
+    const fabCount = document.getElementById('cartFabCount');
+    const totalEl = document.getElementById('cartTotal');
+
+    const totalItems = cart.reduce((s, i) => s + i.qty, 0);
+    const totalPrice = cart.reduce((s, i) => s + i.price * i.qty, 0);
+
+    fabCount.textContent = totalItems;
+    fabEl.style.display = totalItems > 0 ? 'flex' : 'none';
+    totalEl.textContent = '$' + totalPrice.toFixed(2);
+
+    if (cart.length === 0) {
+      emptyEl.style.display = 'block';
+      footerEl.style.display = 'none';
+      itemsEl.innerHTML = '<div class="cart-empty" id="cartEmpty">Your cart is empty.</div>';
+      return;
+    }
+
+    emptyEl && (emptyEl.style.display = 'none');
+    footerEl.style.display = 'block';
+
+    let html = '';
+    cart.forEach((item, i) => {
+      html += `
+        <div class="cart-item">
+          <img class="cart-item-img" src="${item.img}" alt="${item.name}" />
+          <div class="cart-item-info">
+            <div class="cart-item-name">${item.name}</div>
+            <div class="cart-item-meta">Size: ${item.size} · Qty: ${item.qty}</div>
+            <div class="cart-item-price">$${(item.price * item.qty).toFixed(2)}</div>
+          </div>
+          <button class="cart-item-remove" onclick="removeFromCart(${i})">✕</button>
+        </div>`;
+    });
+    itemsEl.innerHTML = html;
+  }
+
+  function openCart() {
+    document.getElementById('cartDrawer').classList.add('open');
+    document.getElementById('cartOverlay').classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closeCart() {
+    document.getElementById('cartDrawer').classList.remove('open');
+    document.getElementById('cartOverlay').classList.remove('open');
+    document.body.style.overflow = '';
+  }
+
+  async function goToCheckout() {
+    const btn = document.getElementById('checkoutBtn');
+    btn.disabled = true;
+    btn.textContent = 'Loading…';
+
+    const items = cart.map(i => ({
+      name: i.name,
+      price: i.price,
+      size: i.size,
+      qty: i.qty
+    }));
+
+    try {
+      const res = await fetch('/functions/checkout', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ items })
+      });
+      const data = await res.json();
+      if (data.url) {
+        window.location.href = data.url;
+      } else {
+        alert('Something went wrong. Please try again.');
+        btn.disabled = false;
+        btn.textContent = 'Checkout →';
+      }
+    } catch (err) {
+      alert('Connection error. Please try again.');
+      btn.disabled = false;
+      btn.textContent = 'Checkout →';
+    }
+  }
+</script>
+</body>
+</html>
