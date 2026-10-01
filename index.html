@@ -1371,8 +1371,8 @@
             <label class="size-label">Size:</label>
             <select class="size-select" id="size-roots">
               <option value="">Select</option>
-              <option>XS</option><option>S</option><option>M</option>
-              <option>L</option><option>XL</option><option>XXL</option>
+              <option>S</option><option>M</option>
+              <option>L</option><option>XL</option>
             </select>
           </div>
           <button class="add-to-cart-btn" onclick="addToCart('Roots Hoodie', 180, 'roots', 'Roots_Hoodie.jpg')">Add to Cart</button>
@@ -1391,8 +1391,8 @@
             <label class="size-label">Size:</label>
             <select class="size-select" id="size-polly">
               <option value="">Select</option>
-              <option>XS</option><option>S</option><option>M</option>
-              <option>L</option><option>XL</option><option>XXL</option>
+              <option>S</option><option>M</option>
+              <option>L</option><option>XL</option>
             </select>
           </div>
           <button class="add-to-cart-btn" onclick="addToCart('Polly Three-Quarter Sleeve Tee', 40, 'polly', 'Polly_Three-Quarter_Sleeve_Tee.jpg')">Add to Cart</button>
@@ -1411,8 +1411,8 @@
             <label class="size-label">Size:</label>
             <select class="size-select" id="size-white-crew">
               <option value="">Select</option>
-              <option>XS</option><option>S</option><option>M</option>
-              <option>L</option><option>XL</option><option>XXL</option>
+              <option>S</option><option>M</option>
+              <option>L</option><option>XL</option>
             </select>
           </div>
           <button class="add-to-cart-btn" onclick="addToCart('PICKLE Crew Sweatshirt', 80, 'white-crew', 'White_PICKLE_Hoodie_Sweatshirt.jpg')">Add to Cart</button>
@@ -1431,8 +1431,8 @@
             <label class="size-label">Size:</label>
             <select class="size-select" id="size-black-hoodie">
               <option value="">Select</option>
-              <option>XS</option><option>S</option><option>M</option>
-              <option>L</option><option>XL</option><option>XXL</option>
+              <option>S</option><option>M</option>
+              <option>L</option><option>XL</option>
             </select>
           </div>
           <button class="add-to-cart-btn" onclick="addToCart('PICKLE Hoodie Sweatshirt', 80, 'black-hoodie', 'Black_PICKLE_Hoodie_Sweatshirt.jpg')">Add to Cart</button>
@@ -1625,6 +1625,10 @@
       const data = await res.json();
       if (data.url) {
         window.location.href = data.url;
+      } else if (data.error) {
+        alert(data.error);
+        btn.disabled = false;
+        btn.textContent = 'Checkout →';
       } else {
         alert('Something went wrong. Please try again.');
         btn.disabled = false;
