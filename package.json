@@ -1,0 +1,8 @@
+{
+  "name": "thekitchendink",
+  "version": "1.0.0",
+  "description": "The Kitchen Dink website",
+  "dependencies": {
+    "stripe": "^14.0.0"
+  }
+}
