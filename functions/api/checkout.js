@@ -1,18 +1,22 @@
-// Cloudflare Pages Function — /functions/checkout.js
-// Handles POST /functions/checkout
-// Creates a Stripe Checkout session server-side and returns the redirect URL.
-//
-// SETUP REQUIRED IN CLOUDFLARE PAGES:
-//   Settings → Environment Variables → Add:
-//     STRIPE_SECRET_KEY = sk_live_xxxxxxxxxxxxxxxxxxxx
-//
-// SETUP REQUIRED IN STRIPE DASHBOARD:
-//   1. Go to stripe.com/dashboard → Products
-//   2. Create each product with a one-time price matching the amounts below
-//   3. Copy each Price ID (starts with price_...) and paste into PRICE_MAP below
-
-export async function onRequestPost(context) {
+export async function onRequest(context) {
   const { request, env } = context;
+
+  if (request.method === 'OPTIONS') {
+    return new Response(null, {
+      headers: {
+        'Access-Control-Allow-Origin': '*',
+        'Access-Control-Allow-Methods': 'POST, OPTIONS',
+        'Access-Control-Allow-Headers': 'Content-Type',
+      },
+    });
+  }
+
+  if (request.method !== 'POST') {
+    return new Response(JSON.stringify({ error: 'Method not allowed' }), {
+      status: 405,
+      headers: { 'Content-Type': 'application/json' },
+    });
+  }
 
   const STRIPE_SECRET_KEY = env.STRIPE_SECRET_KEY;
 
@@ -23,17 +27,12 @@ export async function onRequestPost(context) {
     });
   }
 
-  // ── PRICE MAP ──────────────────────────────────────────────────────────────
-  // Replace each "price_REPLACE_ME" with the actual Price ID from your
-  // Stripe dashboard (Dashboard → Products → click product → copy Price ID).
-  // The key must exactly match the item name sent from the cart.
   const PRICE_MAP = {
     'Roots Hoodie':                    'price_1ULPIfK3JYl815aClbp6dio7',
     'Polly Three-Quarter Sleeve Tee':  'price_1ULPPdK3JYl815aC6yhODAgn',
     'PICKLE Crew Sweatshirt':          'price_1ULPxyK3JYl815aCMBgCC2SX',
     'PICKLE Hoodie Sweatshirt':        'price_1ULQ0TK3JYl815aCo752Jte3',
   };
-  // ──────────────────────────────────────────────────────────────────────────
 
   let body;
   try {
@@ -54,26 +53,18 @@ export async function onRequestPost(context) {
     });
   }
 
-  // Build Stripe line_items — one per cart entry
   const line_items = [];
-
   for (const item of items) {
     const priceId = PRICE_MAP[item.name];
-    if (!priceId || priceId.includes('REPLACE_ME')) {
+    if (!priceId) {
       return new Response(
         JSON.stringify({ error: `Price ID not configured for: ${item.name}` }),
         { status: 500, headers: { 'Content-Type': 'application/json' } }
       );
     }
-    line_items.push({
-      price: priceId,
-      quantity: item.qty,
-      // Pass size as adjustable metadata via description override isn't
-      // possible directly — we capture it in payment_intent_data.metadata below
-    });
+    line_items.push({ price: priceId, quantity: item.qty });
   }
 
-  // Collect size info for Stripe metadata (visible in dashboard per order)
   const sizeMetadata = {};
   items.forEach((item, i) => {
     sizeMetadata[`item_${i + 1}`] = `${item.name} — Size: ${item.size} — Qty: ${item.qty}`;
@@ -84,9 +75,7 @@ export async function onRequestPost(context) {
   const sessionPayload = {
     mode: 'payment',
     line_items,
-    shipping_address_collection: {
-      allowed_countries: ['US', 'CA'],
-    },
+    shipping_address_collection: { allowed_countries: ['US', 'CA'] },
     payment_intent_data: {
       metadata: sizeMetadata,
       statement_descriptor_suffix: 'KITCHEN DINK',
@@ -107,7 +96,6 @@ export async function onRequestPost(context) {
   const session = await stripeRes.json();
 
   if (!stripeRes.ok || !session.url) {
-    console.error('Stripe error:', session);
     return new Response(
       JSON.stringify({ error: session.error?.message || 'Stripe error.' }),
       { status: 500, headers: { 'Content-Type': 'application/json' } }
@@ -123,8 +111,6 @@ export async function onRequestPost(context) {
   });
 }
 
-// Stripe's API uses form-encoded bodies, not JSON.
-// This helper flattens a nested object into the format Stripe expects.
 function encodeStripeBody(obj, prefix = '') {
   const parts = [];
   for (const [key, value] of Object.entries(obj)) {
