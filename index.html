@@ -1169,19 +1169,121 @@
     }
     .footer-copy { font-size: 12px; color: rgba(255,255,255,0.25); }
 
+    /* ── HAMBURGER MENU ── */
+    .nav-hamburger {
+      display: none;
+      flex-direction: column;
+      gap: 5px;
+      cursor: pointer;
+      padding: 8px;
+      background: none;
+      border: none;
+    }
+    .nav-hamburger span {
+      display: block;
+      width: 22px;
+      height: 2px;
+      background: var(--kd-white);
+      border-radius: 2px;
+      transition: all 0.25s;
+    }
+    .mobile-menu {
+      display: none;
+      position: fixed;
+      top: 68px;
+      left: 0;
+      right: 0;
+      background: var(--kd-black);
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+      z-index: 999;
+      padding: 16px 24px 24px;
+    }
+    .mobile-menu.open { display: block; }
+    .mobile-menu ul {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+    .mobile-menu ul li a {
+      display: block;
+      color: rgba(255,255,255,0.7);
+      text-decoration: none;
+      font-size: 14px;
+      font-weight: 600;
+      letter-spacing: 0.5px;
+      padding: 12px 0;
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+      transition: color 0.2s;
+    }
+    .mobile-menu ul li:last-child a { border-bottom: none; }
+    .mobile-menu ul li a:hover { color: var(--kd-lime); }
+
     /* ── RESPONSIVE ── */
     @media (max-width: 900px) {
-      nav { padding: 0 24px; }
+      /* Nav */
+      nav { padding: 0 20px; }
       .nav-links { display: none; }
-      .hero { padding: 60px 24px; }
-      .hero-inner { grid-template-columns: 1fr; gap: 40px; }
+      .nav-hamburger { display: flex; }
+      .nav-cta { padding: 9px 16px; font-size: 11px; }
+
+      /* Hero */
+      .hero { padding: 52px 20px 60px; min-height: auto; }
+      .hero-inner { grid-template-columns: 1fr; gap: 0; }
       .hero-visual { display: none; }
-      .section-wrap, .merch-section-wrap, .polly-spotlight { padding: 60px 24px; }
-      .brands-grid { grid-template-columns: 1fr; }
+      .hero-title { font-size: clamp(44px, 13vw, 66px); margin-bottom: 18px; }
+      .hero-sub { font-size: 15px; margin-bottom: 28px; }
+      .hero-btns { margin-bottom: 0; }
+      .hero-stats { display: none; }
+
+      /* Sections */
+      .section-wrap { padding: 52px 20px; }
+      .merch-section-wrap { padding: 52px 20px; }
+      .polly-spotlight { padding: 60px 20px; }
+      .section-title { margin-bottom: 28px; }
+
+      /* Brands grid */
+      .brands-grid { grid-template-columns: 1fr; gap: 14px; }
+      .brand-card { padding: 28px 24px; }
+
+      /* WSO section */
+      .wso-section { padding: 60px 20px; }
+      .wso-inner { grid-template-columns: 1fr; gap: 40px; }
+      .wso-logo-wrap { order: -1; }
+      .wso-logo-wrap img { max-width: 240px; }
+
+      /* PLA section */
+      .pla-section { padding: 60px 20px; }
+      .pla-inner { grid-template-columns: 1fr; gap: 36px; }
+      .pla-logo-wrap img { max-width: 200px; }
+
+      /* Polly spotlight */
       .polly-spotlight-inner { grid-template-columns: 1fr; }
-      .merch-grid { grid-template-columns: 1fr 1fr; }
-      .events-grid { grid-template-columns: 1fr; }
-      .footer-top { grid-template-columns: 1fr 1fr; gap: 32px; }
+      .books-row { flex-direction: column; gap: 10px; }
+      .polly-headline { font-size: clamp(30px, 9vw, 44px); }
+
+      /* Merch grid — single column on small phones, 2-col on tablets */
+      .merch-grid { grid-template-columns: 1fr; gap: 20px; }
+      .merch-card { max-width: 420px; margin: 0 auto; width: 100%; }
+      .merch-img { height: 280px; }
+
+      /* Cart drawer */
+      .cart-drawer { width: 100%; right: 0; max-width: 100%; }
+
+      /* Footer */
+      .footer-top { grid-template-columns: 1fr; gap: 28px; }
+      .footer-copy { text-align: center; }
+    }
+
+    @media (max-width: 480px) {
+      .hero-title { font-size: clamp(38px, 12vw, 52px); }
+      .hero-sub { font-size: 14px; }
+      .btn-primary, .btn-ghost, .btn-wso, .btn-pla, .btn-polly {
+        width: 100%;
+        text-align: center;
+        padding: 14px 20px;
+      }
+      .nav-cta { display: none; }
     }
   </style>
 </head>
@@ -1198,8 +1300,22 @@
   </ul>
   <div class="nav-right">
     <a href="#merch" class="nav-cta">Shop Merch</a>
+    <button class="nav-hamburger" id="hamburgerBtn" onclick="toggleMenu()" aria-label="Menu">
+      <span></span><span></span><span></span>
+    </button>
   </div>
 </nav>
+
+<!-- MOBILE MENU -->
+<div class="mobile-menu" id="mobileMenu">
+  <ul>
+    <li><a href="#about" onclick="closeMenu()">About Us</a></li>
+    <li><a href="#pla" onclick="closeMenu()">Pickleball League of America</a></li>
+    <li><a href="#wsopickle" onclick="closeMenu()">World Series of PICKLE</a></li>
+    <li><a href="#polly" onclick="closeMenu()">Polly the Panda</a></li>
+    <li><a href="#merch" onclick="closeMenu()">Shop Merch</a></li>
+  </ul>
+</div>
 
 <!-- HERO -->
 <section class="hero" id="about">
@@ -1515,6 +1631,15 @@
 </footer>
 
 <script>
+  // ── MOBILE MENU ──
+  function toggleMenu() {
+    const menu = document.getElementById('mobileMenu');
+    menu.classList.toggle('open');
+  }
+  function closeMenu() {
+    document.getElementById('mobileMenu').classList.remove('open');
+  }
+
   // ── CART STATE ──
   let cart = [];
 
